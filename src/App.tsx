@@ -1,5 +1,11 @@
+import { Outlet } from 'react-router-dom';
+
 const App = () => {
-	return <div>Init: 프로젝트 초기화</div>;
+	return (
+		<main>
+			<Outlet />
+		</main>
+	);
 };
 
 export default App;
