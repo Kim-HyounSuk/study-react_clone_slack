@@ -28,7 +28,8 @@
 			"@utils/*": ["src/utils/*"],
 			"@pages/*": ["src/pages/*"],
 			"@layouts/*": ["src/layouts/*"],
-			"@hooks/*": ["src/hooks/*"]
+			"@hooks/*": ["src/hooks/*"],
+			"@styles/*": ["src/styles/*"]
 		}
 	},
 	"include": ["src"]
