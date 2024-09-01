@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import {
 	Button,
 	Error,
@@ -11,8 +11,13 @@ import {
 import { useCallback, useState } from 'react';
 import useInput from '@/hooks/useinput';
 import axios from 'axios';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const Login = () => {
+	const { data, mutate } = useSWR('/api/users', fetcher, {
+		dedupingInterval: 600000,
+	});
 	const [loginError, setLoginError] = useState(false);
 	const { value: email, handler: onChangeEmail } = useInput('');
 	const { value: password, handler: onChangePassword } = useInput('');
@@ -24,18 +29,32 @@ const Login = () => {
 			setLoginError(false);
 
 			axios
-				.post('/api/users/login', {
-					email,
-					password,
+				.post(
+					'/api/users/login',
+					{
+						email,
+						password,
+					},
+					{ withCredentials: true },
+				)
+				.then(() => {
+					mutate();
 				})
-				.then(() => {})
 				.catch((err) => {
 					setLoginError(err.response.data.status === 401);
 				});
 		},
 
-		[email, password],
+		[email, password, mutate],
 	);
+
+	if (data === undefined) {
+		return <div>로딩중...</div>;
+	}
+
+	if (data) {
+		return <Navigate to="/workspace/sleact/channel/일반" />;
+	}
 
 	return (
 		<div id="container">
